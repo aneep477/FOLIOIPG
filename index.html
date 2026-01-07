@@ -3,220 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem E-Folio IPG v3.0</title>
+    <title>Sistem E-Folio IPG v4.1 (Logo Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .active-tab { border-bottom: 4px solid #2563eb; color: #2563eb; background: #f8fafc; }
-        .card-anim { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-anim:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .modal { transition: opacity 0.25s ease; }
+        body.modal-active { overflow-x: hidden; overflow-y: visible !important; }
     </style>
 </head>
-<body class="bg-[#fbfcfd] min-h-screen">
+<body class="bg-[#f8fafc] min-h-screen">
 
-    <div id="login-page" class="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-blue-50 to-white">
+    <div id="login-page" class="flex items-center justify-center min-h-screen px-4 bg-slate-50">
         <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100">
-            <div class="text-center mb-10">
-                <div class="bg-blue-600 w-20 h-20 rounded-3xl rotate-3 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-200">
-                    <i class="fas fa-university text-white text-3xl -rotate-3"></i>
-                </div>
-                <h1 class="text-3xl font-black text-slate-800 tracking-tight">E-Folio IPG</h1>
-                <p class="text-slate-400 mt-2 font-medium italic">Sistem Pengurusan Rekod Pensyarah</p>
+            <div class="text-center mb-8">
+                <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo IPG" class="w-32 h-32 mx-auto mb-6 object-contain shadow-sm rounded-2xl">
+                <h1 class="text-2xl font-black text-slate-800 tracking-tight uppercase">E-Folio Login</h1>
+                <p class="text-slate-400 text-xs font-bold mt-1">SISTEM PENGURUSAN REKOD DIGITAL</p>
             </div>
             <form id="login-form" class="space-y-4">
-                <div class="relative">
-                    <i class="fas fa-user absolute left-5 top-5 text-slate-300"></i>
-                    <input type="text" id="username" placeholder="Username" required class="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                </div>
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-5 top-5 text-slate-300"></i>
-                    <input type="password" id="password" placeholder="Password" required class="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                </div>
-                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95">Log Masuk</button>
+                <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-100">Log Masuk</button>
             </form>
-            <p id="login-error" class="text-red-500 text-sm mt-4 text-center hidden font-bold">Username atau Password salah!</p>
+            <p id="login-error" class="text-red-500 text-sm mt-4 text-center hidden font-bold">Akses Ditolak! Sila semak ID.</p>
         </div>
     </div>
 
     <div id="dashboard-page" class="hidden">
         <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-100"><i class="fas fa-id-badge text-white"></i></div>
-                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase">Portal<span class="text-blue-600">Folio</span></span>
+                <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-10 h-10 object-contain">
+                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase">PORTAL<span class="text-blue-600">FOLIO</span></span>
             </div>
-            <button onclick="logout()" class="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-power-off"></i></button>
+            <div class="flex items-center gap-4">
+                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-[10px] font-black transition-all shadow-lg shadow-blue-100 uppercase">
+                    <i class="fas fa-plus mr-1"></i> Tambah Bahan
+                </button>
+                <button onclick="logout()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-power-off text-lg"></i></button>
+            </div>
         </nav>
 
-        <div class="bg-white border-b flex justify-center sticky top-[73px] z-40 shadow-sm">
-            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-5 px-8 text-xs font-black uppercase tracking-widest active-tab transition-all">Folio Pensyarah</button>
-            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-5 px-8 text-xs font-black uppercase tracking-widest text-slate-400 transition-all">Folio Kursus</button>
+        <div class="bg-white border-b flex justify-center sticky top-[73px] z-40">
+            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-4 px-8 text-xs font-black uppercase tracking-widest active-tab transition-all">Folio Pensyarah</button>
+            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-4 px-8 text-xs font-black uppercase tracking-widest text-slate-400 transition-all">Folio Kursus</button>
         </div>
 
         <main class="max-w-7xl mx-auto p-6 md:p-10">
-            <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div class="flex flex-wrap gap-4">
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tapis Tahun</label>
-                        <select id="year-filter" onchange="applyFilters()" class="block w-40 bg-white border border-slate-100 shadow-sm rounded-2xl px-5 py-3.5 font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option value="Semua">Semua Tahun</option>
-                        </select>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Kategori Rekod</label>
-                        <select id="category-filter" onchange="applyFilters()" class="block w-72 bg-white border border-slate-100 shadow-sm rounded-2xl px-5 py-3.5 font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option value="Semua">Semua Kategori</option>
-                        </select>
-                    </div>
+            <div class="mb-10 flex flex-wrap gap-4 items-center bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+                <div class="flex flex-col gap-1">
+                    <span class="text-[9px] font-black text-slate-400 uppercase ml-1">Tahun</span>
+                    <select id="year-filter" onchange="applyFilters()" class="bg-slate-50 border-none rounded-xl px-4 py-2.5 font-bold text-slate-700 text-sm outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px]">
+                        <option value="Semua">Semua</option>
+                    </select>
                 </div>
-                <div class="bg-white px-8 py-4 rounded-[2rem] border border-slate-100 shadow-sm text-center md:text-right">
-                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Koleksi Rekod</p>
-                    <h2 id="stats-count" class="text-4xl font-black text-blue-600">0</h2>
+                <div class="flex flex-col gap-1">
+                    <span class="text-[9px] font-black text-slate-400 uppercase ml-1">Kategori Dokumen</span>
+                    <select id="category-filter" onchange="applyFilters()" class="bg-slate-50 border-none rounded-xl px-4 py-2.5 font-bold text-slate-700 text-sm outline-none focus:ring-2 focus:ring-blue-500 min-w-[200px]">
+                        <option value="Semua">Semua Kategori</option>
+                    </select>
+                </div>
+                <div class="ml-auto text-right">
+                    <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest block">Total Rekod</span>
+                    <span id="stats-count" class="text-3xl font-black text-blue-600 leading-none">0</span>
                 </div>
             </div>
 
             <div id="data-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="col-span-full text-center py-20">
-                    <div class="inline-block p-5 bg-white rounded-full shadow-lg mb-4">
-                        <i class="fas fa-spinner fa-spin text-3xl text-blue-600"></i>
-                    </div>
-                    <p class="font-bold text-slate-400 tracking-widest uppercase text-xs">Menyusun data anda...</p>
-                </div>
+                <div class="col-span-full text-center py-20 font-bold text-slate-300">Menarik data dari sistem...</div>
             </div>
         </main>
     </div>
 
-    <script>
-        // GANTIKAN DENGAN URL API ANDA
-        const API_URL = "https://script.google.com/macros/s/AKfycbyMi9VGIyhQDw9zmGfx68ChbOcApLURk1tYIFqUG1Kjn2gz1Seltj50pfd58QG24xHIOA/exec";
+    <div id="modal-add" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
+            <div class="bg-white rounded-[2.5rem] shadow-2xl z-[110] w-full max-w-xl p-8 relative">
+                <div class="flex items-center gap-3 mb-6">
+                    <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-8 h-8 object-contain">
+                    <h2 id="modal-title" class="text-xl font-black text-slate-800 uppercase tracking-tight">Daftar Rekod Baru</h2>
+                </div>
+                
+                <form id="add-form" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Tahun</label>
+                            <input type="number" id="f-tahun" placeholder="2026" required class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Kategori</label>
+                            <select id="f-kategori" required class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm"></select>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label id="label-nama" class="text-[10px] font-black text-slate-400 uppercase ml-2">Nama Bahan / Subjek</label>
+                        <input type="text" id="f-nama" placeholder="..." required class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Keterangan Tambahan</label>
+                        <textarea id="f-keterangan" rows="2" class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm" placeholder="Nota ringkas..."></textarea>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Link Dokumen (Google Drive/PDF)</label>
+                        <input type="url" id="f-pautan" placeholder="https://..." required class="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm">
+                    </div>
+                    
+                    <div class="flex gap-3 pt-6">
+                        <button type="button" onclick="closeModal()" class="flex-1 bg-slate-100 text-slate-500 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-all uppercase text-xs">Batal</button>
+                        <button type="submit" id="btn-save" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 uppercase text-xs">Hantar Rekod</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbw72-zryqkMFIBlO3akMk1mBebj3QAEXeanJpa8NTUltiFmJ5GPkusislEf9RJ9JrQTAw/exec";
+        
         let currentTab = 'Data_Folio';
         let fullData = [];
 
-        const catPensyarah = ["PROFIL PENSYARAH", "SENARAI TUGAS", "SIJIL KELAYAKAN", "SURAT LANTIKAN PERKHIDMATAN", "SURAT PANGGILAN", "SIJIL KURSUS ATAU BENGKEL", "LAIN LAIN"];
-        const catKursus = ["KALENDER AKADEMIK", "JADUAL WAKTU", "MAKLUMAT KURSUS", "RANCANGAN SEMESTER", "RANCANGAN MINGGUAN", "MAKLUMAT PELAJAR", "REKOD KEHADIRAN PELAJAR", "JST", "SOALAN TUGASAN", "RUBRIK", "PENTAKSIRAN", "MODERASI PENTAKSIRAN", "LAPORAN PENTAKSIRAN", "TUGAS TAMBAHAN", "PERINCIAN ATP", "LAIN LAIN"];
+        const catsPensyarah = ["PROFIL PENSYARAH", "SENARAI TUGAS", "SIJIL KELAYAKAN", "SURAT LANTIKAN PERKHIDMATAN", "SURAT PANGGILAN", "SIJIL KURSUS ATAU BENGKEL", "LAIN LAIN"];
+        const catsKursus = ["KALENDER AKADEMIK", "JADUAL WAKTU", "MAKLUMAT KURSUS", "RANCANGAN SEMESTER", "RANCANGAN MINGGUAN", "MAKLUMAT PELAJAR", "REKOD KEHADIRAN PELAJAR", "JST", "SOALAN TUGASAN", "RUBRIK", "PENTAKSIRAN", "MODERASI PENTAKSIRAN", "LAPORAN PENTAKSIRAN", "TUGAS TAMBAHAN", "PERINCIAN ATP", "LAIN LAIN"];
 
-        window.onload = () => {
-            if(localStorage.getItem('folio_logged') === 'true') {
-                switchTab('Data_Folio');
-                showDashboard();
-            }
-        };
+        window.onload = () => { if(localStorage.getItem('f_log') === '1') showDashboard(); };
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-login');
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-            btn.disabled = true;
-
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
             try {
                 const res = await fetch(`${API_URL}?sheet=Users`);
                 const data = await res.json();
                 const user = data.find(u => u.Username == document.getElementById('username').value && u.Password == document.getElementById('password').value);
-                
-                if(user) {
-                    localStorage.setItem('folio_logged', 'true');
-                    showDashboard();
-                } else {
-                    document.getElementById('login-error').classList.remove('hidden');
-                    btn.innerHTML = 'Log Masuk';
-                    btn.disabled = false;
-                }
+                if(user) { localStorage.setItem('f_log', '1'); showDashboard(); }
+                else { document.getElementById('login-error').classList.remove('hidden'); btn.innerHTML = 'Log Masuk'; btn.disabled = false; }
             } catch (err) { alert("Ralat API!"); btn.innerHTML = 'Log Masuk'; btn.disabled = false; }
         });
 
         function showDashboard() {
             document.getElementById('login-page').classList.add('hidden');
             document.getElementById('dashboard-page').classList.remove('hidden');
-            updateCategoryDropdown();
-            loadData();
+            switchTab('Data_Folio');
         }
 
-        function updateCategoryDropdown() {
-            const select = document.getElementById('category-filter');
-            const cats = (currentTab === 'Data_Folio') ? catPensyarah : catKursus;
-            select.innerHTML = '<option value="Semua">Semua Kategori</option>' + 
-                               cats.map(c => `<option value="${c}">${c}</option>`).join('');
-        }
-
-        async function switchTab(tabName) {
-            currentTab = tabName;
-            document.getElementById('tab-pensyarah').classList.toggle('active-tab', tabName === 'Data_Folio');
-            document.getElementById('tab-kursus').classList.toggle('active-tab', tabName === 'Folio_Kursus');
-            document.getElementById('tab-pensyarah').classList.toggle('text-slate-400', tabName !== 'Data_Folio');
-            document.getElementById('tab-kursus').classList.toggle('text-slate-400', tabName !== 'Folio_Kursus');
+        async function switchTab(name) {
+            currentTab = name;
+            document.getElementById('tab-pensyarah').className = name === 'Data_Folio' ? 'py-4 px-8 text-xs font-black uppercase tracking-widest active-tab transition-all' : 'py-4 px-8 text-xs font-black uppercase tracking-widest text-slate-400 transition-all';
+            document.getElementById('tab-kursus').className = name === 'Folio_Kursus' ? 'py-4 px-8 text-xs font-black uppercase tracking-widest active-tab transition-all' : 'py-4 px-8 text-xs font-black uppercase tracking-widest text-slate-400 transition-all';
             
-            updateCategoryDropdown();
+            const catFilter = document.getElementById('category-filter');
+            const target = name === 'Data_Folio' ? catsPensyarah : catsKursus;
+            catFilter.innerHTML = '<option value="Semua">Semua Kategori</option>' + target.map(c => `<option value="${c}">${c}</option>`).join('');
+            
             loadData();
         }
 
         async function loadData() {
             const container = document.getElementById('data-container');
-            container.innerHTML = '<div class="col-span-full text-center py-20 font-bold text-slate-400">Menarik data dari Google Sheets...</div>';
-            
+            container.innerHTML = '<div class="col-span-full text-center py-20 font-bold text-slate-300">Memuatkan rekod...</div>';
             try {
                 const res = await fetch(`${API_URL}?sheet=${currentTab}`);
                 fullData = await res.json();
-                updateYearDropdown();
+                updateYearFilter();
                 applyFilters();
-            } catch (err) { container.innerHTML = '<p class="text-red-500">Gagal menarik data. Semak nama tab Sheets anda.</p>'; }
+            } catch (err) { container.innerHTML = '<p class="text-red-500 font-bold">Ralat menyambung ke pangkalan data.</p>'; }
         }
 
-        function updateYearDropdown() {
-            const select = document.getElementById('year-filter');
+        function updateYearFilter() {
             const years = [...new Set(fullData.map(d => d.Tahun))].filter(Boolean).sort().reverse();
-            select.innerHTML = '<option value="Semua">Semua Tahun</option>' + 
-                               years.map(y => `<option value="${y}">${y}</option>`).join('');
+            document.getElementById('year-filter').innerHTML = '<option value="Semua">Semua</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
         }
 
         function applyFilters() {
-            const yearVal = document.getElementById('year-filter').value;
-            const catVal = document.getElementById('category-filter').value;
-            let filtered = fullData;
-
-            if(yearVal !== "Semua") filtered = filtered.filter(d => d.Tahun == yearVal);
-            if(catVal !== "Semua") filtered = filtered.filter(d => d.Kategori == catVal);
-
-            renderCards(filtered);
+            const y = document.getElementById('year-filter').value;
+            const c = document.getElementById('category-filter').value;
+            let f = fullData;
+            if(y !== "Semua") f = f.filter(d => d.Tahun == y);
+            if(c !== "Semua") f = f.filter(d => d.Kategori == c);
+            renderCards(f);
         }
 
         function renderCards(data) {
             document.getElementById('stats-count').innerText = data.length;
             const container = document.getElementById('data-container');
-            
-            if(data.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center py-20 text-slate-300 font-bold italic">Tiada rekod dijumpai.</div>';
-                return;
-            }
-
+            if(data.length === 0) { container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-300 italic font-bold">Tiada data direkodkan.</p>'; return; }
             container.innerHTML = data.map(item => `
-                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm card-anim relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[4rem] -mr-10 -mt-10 group-hover:bg-blue-600 transition-all duration-500"></div>
-                    
-                    <div class="flex items-center gap-2 mb-6 relative">
-                        <span class="bg-blue-600 text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">${item.Tahun}</span>
-                        <span class="bg-slate-100 text-slate-500 text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">${item.Kategori || 'UMUM'}</span>
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-12 h-12 bg-blue-50 group-hover:bg-blue-600 transition-all rounded-bl-3xl flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-blue-300 group-hover:text-white text-xs"></i>
                     </div>
-
-                    <h3 class="font-black text-slate-800 text-xl mb-3 leading-tight uppercase group-hover:text-blue-600 transition-colors">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</h3>
-                    <p class="text-slate-400 text-xs font-medium mb-8 leading-relaxed line-clamp-3 italic">"${item.Keterangan || 'Tiada huraian tambahan disediakan untuk rekod ini.'}"</p>
-                    
-                    <div class="flex items-center justify-between">
-                        <div class="h-1 w-12 bg-slate-100 rounded-full group-hover:w-20 group-hover:bg-blue-200 transition-all duration-500"></div>
-                        <a href="${item.Pautan || '#'}" target="_blank" class="flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
-                            Papar Fail <i class="fas fa-external-link-alt"></i>
-                        </a>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-sm shadow-blue-100">${item.Tahun}</span>
+                        <span class="bg-slate-50 text-slate-400 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter border border-slate-100">${item.Kategori || 'UMUM'}</span>
                     </div>
+                    <h3 class="font-black text-slate-800 text-lg mb-2 uppercase leading-tight group-hover:text-blue-600 transition-colors">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</h3>
+                    <p class="text-slate-500 text-xs mb-8 leading-relaxed line-clamp-3 italic">"${item.Keterangan || 'Tiada huraian tambahan disediakan.'}"</p>
+                    <a href="${item.Pautan || '#'}" target="_blank" class="block w-full text-center bg-slate-900 text-white text-[10px] font-black py-3.5 rounded-xl hover:bg-blue-600 transition-all shadow-lg hover:shadow-blue-200">PAPARKAN DOKUMEN <i class="fas fa-external-link-alt ml-1 text-[8px]"></i></a>
                 </div>
             `).join('');
         }
 
-        function logout() {
-            localStorage.removeItem('folio_logged');
-            location.reload();
+        function openModal() {
+            document.getElementById('modal-add').classList.remove('hidden');
+            document.getElementById('modal-title').innerText = currentTab === 'Data_Folio' ? 'Daftar Folio Pensyarah' : 'Daftar Folio Kursus';
+            document.getElementById('label-nama').innerText = currentTab === 'Data_Folio' ? 'Nama Pensyarah' : 'Kod & Nama Kursus';
+            const catForm = document.getElementById('f-kategori');
+            const target = currentTab === 'Data_Folio' ? catsPensyarah : catsKursus;
+            catForm.innerHTML = target.map(c => `<option value="${c}">${c}</option>`).join('');
         }
+
+        function closeModal() { document.getElementById('modal-add').classList.add('hidden'); document.getElementById('add-form').reset(); }
+
+        document.getElementById('add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save');
+            btn.innerHTML = 'MENYIMPAN... <i class="fas fa-circle-notch fa-spin"></i>'; btn.disabled = true;
+
+            const payload = {
+                targetSheet: currentTab,
+                tahun: document.getElementById('f-tahun').value,
+                kategori: document.getElementById('f-kategori').value,
+                nama: currentTab === 'Data_Folio' ? document.getElementById('f-nama').value : "",
+                nama_kursus: currentTab === 'Folio_Kursus' ? document.getElementById('f-nama').value : "",
+                keterangan: document.getElementById('f-keterangan').value,
+                pautan: document.getElementById('f-pautan').value
+            };
+
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+                const result = await res.json();
+                if(result.result === "success") {
+                    alert("✅ Rekod telah berjaya disimpan ke Google Sheets!");
+                    closeModal();
+                    loadData();
+                } else { alert("Ralat: " + result.message); }
+            } catch (err) { alert("Gagal menghantar data. Sila semak sambungan internet."); }
+            btn.innerHTML = 'Hantar Rekod'; btn.disabled = false;
+        });
+
+        function logout() { localStorage.removeItem('f_log'); location.reload(); }
     </script>
 </body>
 </html>
