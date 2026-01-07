@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem E-Folio IPG v3.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .active-tab { border-bottom: 4px solid #2563eb; color: #2563eb; background: #f8fafc; }
+        .card-anim { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-anim:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="bg-[#fbfcfd] min-h-screen">
+
+    <div id="login-page" class="flex items-center justify-center min-h-screen px-4 bg-gradient-to-br from-blue-50 to-white">
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100">
+            <div class="text-center mb-10">
+                <div class="bg-blue-600 w-20 h-20 rounded-3xl rotate-3 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-200">
+                    <i class="fas fa-university text-white text-3xl -rotate-3"></i>
+                </div>
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">E-Folio IPG</h1>
+                <p class="text-slate-400 mt-2 font-medium italic">Sistem Pengurusan Rekod Pensyarah</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div class="relative">
+                    <i class="fas fa-user absolute left-5 top-5 text-slate-300"></i>
+                    <input type="text" id="username" placeholder="Username" required class="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-5 top-5 text-slate-300"></i>
+                    <input type="password" id="password" placeholder="Password" required class="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-95">Log Masuk</button>
+            </form>
+            <p id="login-error" class="text-red-500 text-sm mt-4 text-center hidden font-bold">Username atau Password salah!</p>
+        </div>
+    </div>
+
+    <div id="dashboard-page" class="hidden">
+        <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-100"><i class="fas fa-id-badge text-white"></i></div>
+                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase">Portal<span class="text-blue-600">Folio</span></span>
+            </div>
+            <button onclick="logout()" class="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-power-off"></i></button>
+        </nav>
+
+        <div class="bg-white border-b flex justify-center sticky top-[73px] z-40 shadow-sm">
+            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-5 px-8 text-xs font-black uppercase tracking-widest active-tab transition-all">Folio Pensyarah</button>
+            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-5 px-8 text-xs font-black uppercase tracking-widest text-slate-400 transition-all">Folio Kursus</button>
+        </div>
+
+        <main class="max-w-7xl mx-auto p-6 md:p-10">
+            <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div class="flex flex-wrap gap-4">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tapis Tahun</label>
+                        <select id="year-filter" onchange="applyFilters()" class="block w-40 bg-white border border-slate-100 shadow-sm rounded-2xl px-5 py-3.5 font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Semua">Semua Tahun</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Kategori Rekod</label>
+                        <select id="category-filter" onchange="applyFilters()" class="block w-72 bg-white border border-slate-100 shadow-sm rounded-2xl px-5 py-3.5 font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Semua">Semua Kategori</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bg-white px-8 py-4 rounded-[2rem] border border-slate-100 shadow-sm text-center md:text-right">
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest">Koleksi Rekod</p>
+                    <h2 id="stats-count" class="text-4xl font-black text-blue-600">0</h2>
+                </div>
+            </div>
+
+            <div id="data-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="col-span-full text-center py-20">
+                    <div class="inline-block p-5 bg-white rounded-full shadow-lg mb-4">
+                        <i class="fas fa-spinner fa-spin text-3xl text-blue-600"></i>
+                    </div>
+                    <p class="font-bold text-slate-400 tracking-widest uppercase text-xs">Menyusun data anda...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // GANTIKAN DENGAN URL API ANDA
+        const API_URL = "https://script.google.com/macros/s/AKfycbyMi9VGIyhQDw9zmGfx68ChbOcApLURk1tYIFqUG1Kjn2gz1Seltj50pfd58QG24xHIOA/exec";
+
+        let currentTab = 'Data_Folio';
+        let fullData = [];
+
+        const catPensyarah = ["PROFIL PENSYARAH", "SENARAI TUGAS", "SIJIL KELAYAKAN", "SURAT LANTIKAN PERKHIDMATAN", "SURAT PANGGILAN", "SIJIL KURSUS ATAU BENGKEL", "LAIN LAIN"];
+        const catKursus = ["KALENDER AKADEMIK", "JADUAL WAKTU", "MAKLUMAT KURSUS", "RANCANGAN SEMESTER", "RANCANGAN MINGGUAN", "MAKLUMAT PELAJAR", "REKOD KEHADIRAN PELAJAR", "JST", "SOALAN TUGASAN", "RUBRIK", "PENTAKSIRAN", "MODERASI PENTAKSIRAN", "LAPORAN PENTAKSIRAN", "TUGAS TAMBAHAN", "PERINCIAN ATP", "LAIN LAIN"];
+
+        window.onload = () => {
+            if(localStorage.getItem('folio_logged') === 'true') {
+                switchTab('Data_Folio');
+                showDashboard();
+            }
+        };
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}?sheet=Users`);
+                const data = await res.json();
+                const user = data.find(u => u.Username == document.getElementById('username').value && u.Password == document.getElementById('password').value);
+                
+                if(user) {
+                    localStorage.setItem('folio_logged', 'true');
+                    showDashboard();
+                } else {
+                    document.getElementById('login-error').classList.remove('hidden');
+                    btn.innerHTML = 'Log Masuk';
+                    btn.disabled = false;
+                }
+            } catch (err) { alert("Ralat API!"); btn.innerHTML = 'Log Masuk'; btn.disabled = false; }
+        });
+
+        function showDashboard() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('dashboard-page').classList.remove('hidden');
+            updateCategoryDropdown();
+            loadData();
+        }
+
+        function updateCategoryDropdown() {
+            const select = document.getElementById('category-filter');
+            const cats = (currentTab === 'Data_Folio') ? catPensyarah : catKursus;
+            select.innerHTML = '<option value="Semua">Semua Kategori</option>' + 
+                               cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        async function switchTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('tab-pensyarah').classList.toggle('active-tab', tabName === 'Data_Folio');
+            document.getElementById('tab-kursus').classList.toggle('active-tab', tabName === 'Folio_Kursus');
+            document.getElementById('tab-pensyarah').classList.toggle('text-slate-400', tabName !== 'Data_Folio');
+            document.getElementById('tab-kursus').classList.toggle('text-slate-400', tabName !== 'Folio_Kursus');
+            
+            updateCategoryDropdown();
+            loadData();
+        }
+
+        async function loadData() {
+            const container = document.getElementById('data-container');
+            container.innerHTML = '<div class="col-span-full text-center py-20 font-bold text-slate-400">Menarik data dari Google Sheets...</div>';
+            
+            try {
+                const res = await fetch(`${API_URL}?sheet=${currentTab}`);
+                fullData = await res.json();
+                updateYearDropdown();
+                applyFilters();
+            } catch (err) { container.innerHTML = '<p class="text-red-500">Gagal menarik data. Semak nama tab Sheets anda.</p>'; }
+        }
+
+        function updateYearDropdown() {
+            const select = document.getElementById('year-filter');
+            const years = [...new Set(fullData.map(d => d.Tahun))].filter(Boolean).sort().reverse();
+            select.innerHTML = '<option value="Semua">Semua Tahun</option>' + 
+                               years.map(y => `<option value="${y}">${y}</option>`).join('');
+        }
+
+        function applyFilters() {
+            const yearVal = document.getElementById('year-filter').value;
+            const catVal = document.getElementById('category-filter').value;
+            let filtered = fullData;
+
+            if(yearVal !== "Semua") filtered = filtered.filter(d => d.Tahun == yearVal);
+            if(catVal !== "Semua") filtered = filtered.filter(d => d.Kategori == catVal);
+
+            renderCards(filtered);
+        }
+
+        function renderCards(data) {
+            document.getElementById('stats-count').innerText = data.length;
+            const container = document.getElementById('data-container');
+            
+            if(data.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-20 text-slate-300 font-bold italic">Tiada rekod dijumpai.</div>';
+                return;
+            }
+
+            container.innerHTML = data.map(item => `
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm card-anim relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[4rem] -mr-10 -mt-10 group-hover:bg-blue-600 transition-all duration-500"></div>
+                    
+                    <div class="flex items-center gap-2 mb-6 relative">
+                        <span class="bg-blue-600 text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">${item.Tahun}</span>
+                        <span class="bg-slate-100 text-slate-500 text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">${item.Kategori || 'UMUM'}</span>
+                    </div>
+
+                    <h3 class="font-black text-slate-800 text-xl mb-3 leading-tight uppercase group-hover:text-blue-600 transition-colors">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</h3>
+                    <p class="text-slate-400 text-xs font-medium mb-8 leading-relaxed line-clamp-3 italic">"${item.Keterangan || 'Tiada huraian tambahan disediakan untuk rekod ini.'}"</p>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="h-1 w-12 bg-slate-100 rounded-full group-hover:w-20 group-hover:bg-blue-200 transition-all duration-500"></div>
+                        <a href="${item.Pautan || '#'}" target="_blank" class="flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors">
+                            Papar Fail <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function logout() {
+            localStorage.removeItem('folio_logged');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
