@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Folio IPG v5.1</title>
+    <title>E-Folio IPG v6.0 (Jadual & Ikon)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .active-tab { border-bottom: 4px solid #2563eb; color: #2563eb; background: #f8fafc; }
-        .card-anim { transition: all 0.3s ease; }
-        .card-anim:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        /* Table Scroll for Mobile */
+        .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        tr:hover { background-color: #f8fafc; transition: all 0.2s; }
     </style>
 </head>
 <body class="bg-[#f8fafc] min-h-screen text-slate-900">
 
     <div id="login-page" class="flex items-center justify-center min-h-screen px-4 bg-slate-50">
-        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100">
-            <div class="text-center mb-8">
-                <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo IPG" class="w-28 h-28 mx-auto mb-6 object-contain">
-                <h1 class="text-2xl font-black text-slate-800 tracking-tight uppercase">E-Folio Login</h1>
-                <p class="text-slate-400 text-[10px] font-bold mt-1 tracking-widest uppercase">Sistem Rekod Digital Semester</p>
-            </div>
+        <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100 text-center">
+            <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo IPG" class="w-28 h-28 mx-auto mb-6">
+            <h1 class="text-2xl font-black text-slate-800 uppercase mb-8">E-Folio Login</h1>
             <form id="login-form" class="space-y-4">
-                <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">Log Masuk</button>
+                <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-xs">Log Masuk</button>
             </form>
-            <p id="login-error" class="text-red-500 text-xs mt-4 text-center hidden font-bold">Ralat: ID atau Kata Laluan tidak sah!</p>
+            <p id="login-error" class="text-red-500 text-xs mt-4 hidden font-bold">ID atau Kata Laluan tidak sah!</p>
         </div>
     </div>
 
@@ -36,22 +34,22 @@
         <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-10 h-10 object-contain">
-                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase">Portal<span class="text-blue-600">Folio</span></span>
+                <span class="text-xl font-black text-slate-800 tracking-tighter uppercase italic">PORTAL<span class="text-blue-600 font-black">FOLIO</span></span>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="showChecklist()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-xl text-[9px] font-black transition-all uppercase">
-                    <i class="fas fa-clipboard-check mr-1 text-xs"></i> Semak
+                <button onclick="showChecklist()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-xl text-[9px] font-black transition-all shadow-lg shadow-emerald-100 uppercase">
+                    <i class="fas fa-clipboard-check mr-1"></i> Semak
                 </button>
-                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl text-[9px] font-black transition-all uppercase">
-                    <i class="fas fa-plus mr-1 text-xs"></i> Tambah
+                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl text-[9px] font-black transition-all shadow-lg shadow-blue-100 uppercase">
+                    <i class="fas fa-plus mr-1"></i> Tambah
                 </button>
                 <button onclick="logout()" class="text-slate-300 hover:text-red-500 p-2"><i class="fas fa-power-off text-lg"></i></button>
             </div>
         </nav>
 
         <div class="bg-white border-b flex justify-center sticky top-[73px] z-40 shadow-sm">
-            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-4 px-6 md:px-10 text-[10px] font-black uppercase active-tab transition-all">Folio Pensyarah</button>
-            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-4 px-6 md:px-10 text-[10px] font-black uppercase text-slate-400 transition-all">Folio Kursus</button>
+            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-4 px-10 text-[10px] font-black uppercase tracking-widest active-tab transition-all">Folio Pensyarah</button>
+            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-4 px-10 text-[10px] font-black uppercase tracking-widest text-slate-400 transition-all">Folio Kursus</button>
         </div>
 
         <main class="max-w-7xl mx-auto p-6 md:p-10">
@@ -59,11 +57,11 @@
                 <div class="flex flex-wrap gap-4">
                     <div class="space-y-1">
                         <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Tahun</label>
-                        <select id="year-filter" onchange="applyFilters()" class="block w-28 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none"></select>
+                        <select id="year-filter" onchange="applyFilters()" class="block w-28 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
                     </div>
                     <div id="sem-filter-container" class="space-y-1 hidden">
                         <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Semester</label>
-                        <select id="sem-filter" onchange="applyFilters()" class="block w-24 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none">
+                        <select id="sem-filter" onchange="applyFilters()" class="block w-24 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="Semua">Semua</option>
                             <option value="I">I</option>
                             <option value="II">II</option>
@@ -71,17 +69,29 @@
                         </select>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Kategori</label>
-                        <select id="category-filter" onchange="applyFilters()" class="block w-56 md:w-64 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none"></select>
+                        <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Kategori Rekod</label>
+                        <select id="category-filter" onchange="applyFilters()" class="block w-64 bg-slate-50 border-none rounded-xl px-4 py-3 font-bold text-slate-700 text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="text-slate-300 text-[9px] font-black uppercase tracking-widest">Jumlah Fail</p>
+                    <p class="text-slate-300 text-[9px] font-black uppercase tracking-widest">Jumlah Rekod</p>
                     <h2 id="stats-count" class="text-4xl font-black text-blue-600 leading-none">0</h2>
                 </div>
             </div>
 
-            <div id="data-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                <div class="table-container">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr id="table-header">
+                                </tr>
+                        </thead>
+                        <tbody id="table-body" class="text-slate-600 text-xs font-semibold">
+                            </tbody>
+                    </table>
+                </div>
+                <div id="empty-msg" class="hidden text-center py-20 text-slate-300 italic font-bold">Tiada data direkodkan untuk pilihan ini.</div>
+            </div>
         </main>
     </div>
 
@@ -154,8 +164,7 @@
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-login');
-            btn.innerHTML = 'Mengesahkan...'; btn.disabled = true;
+            const btn = document.getElementById('btn-login'); btn.innerHTML = '...'; btn.disabled = true;
             try {
                 const res = await fetch(`${API_URL}?sheet=Users`);
                 const data = await res.json();
@@ -175,26 +184,45 @@
             currentTab = name;
             document.getElementById('tab-pensyarah').className = name === 'Data_Folio' ? 'py-4 px-10 text-[10px] font-black uppercase active-tab transition-all' : 'py-4 px-10 text-[10px] font-black uppercase text-slate-400 transition-all';
             document.getElementById('tab-kursus').className = name === 'Folio_Kursus' ? 'py-4 px-10 text-[10px] font-black uppercase active-tab transition-all' : 'py-4 px-10 text-[10px] font-black uppercase text-slate-400 transition-all';
-            
-            // Toggle Filter Semester
             document.getElementById('sem-filter-container').classList.toggle('hidden', name === 'Data_Folio');
             
             const filter = document.getElementById('category-filter');
             const list = name === 'Data_Folio' ? catP : catK;
             filter.innerHTML = '<option value="Semua">Semua Kategori</option>' + list.map(c => `<option value="${c}">${c}</option>`).join('');
             
+            renderHeader();
             loadData();
         }
 
+        function renderHeader() {
+            const header = document.getElementById('table-header');
+            const commonStyle = "px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400";
+            if(currentTab === 'Data_Folio') {
+                header.innerHTML = `
+                    <th class="${commonStyle}">Tahun</th>
+                    <th class="${commonStyle}">Kategori</th>
+                    <th class="${commonStyle}">Nama / Tajuk</th>
+                    <th class="${commonStyle} text-center">Tindakan</th>
+                `;
+            } else {
+                header.innerHTML = `
+                    <th class="${commonStyle}">Tahun</th>
+                    <th class="${commonStyle}">Sem</th>
+                    <th class="${commonStyle}">Kategori</th>
+                    <th class="${commonStyle}">Nama Kursus</th>
+                    <th class="${commonStyle} text-center">Tindakan</th>
+                `;
+            }
+        }
+
         async function loadData() {
-            const container = document.getElementById('data-container');
-            container.innerHTML = '<div class="col-span-full text-center py-20 font-bold text-slate-300 uppercase tracking-widest text-[10px]">Memuatkan data...</div>';
+            document.getElementById('table-body').innerHTML = '<tr><td colspan="6" class="text-center py-10 font-bold text-slate-300">Menarik data...</td></tr>';
             try {
                 const res = await fetch(`${API_URL}?sheet=${currentTab}`);
                 fullData = await res.json();
                 updateYearFilter();
                 applyFilters();
-            } catch (err) { container.innerHTML = 'Gagal memuatkan data.'; }
+            } catch (err) { alert("Gagal muat data."); }
         }
 
         function updateYearFilter() {
@@ -210,46 +238,68 @@
             if(y !== "Semua") f = f.filter(d => d.Tahun == y);
             if(currentTab === 'Folio_Kursus' && s !== "Semua") f = f.filter(d => d.Semester == s);
             if(c !== "Semua") f = f.filter(d => d.Kategori == c);
-            renderCards(f);
+            renderTable(f);
         }
 
-        function renderCards(data) {
+        function getDownloadLink(url) {
+            // Logik menukar Google Drive View link kepada Download link
+            if (url.includes('drive.google.com/file/d/')) {
+                const fileId = url.split('/d/')[1].split('/')[0];
+                return `https://drive.google.com/uc?export=download&id=${fileId}`;
+            }
+            return url;
+        }
+
+        function renderTable(data) {
             document.getElementById('stats-count').innerText = data.length;
-            const container = document.getElementById('data-container');
-            if(data.length === 0) { container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-300 italic font-bold">Tiada data direkodkan.</p>'; return; }
-            container.innerHTML = data.map(item => `
-                <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm card-anim group">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full uppercase">${item.Tahun}</span>
-                        ${item.Semester ? `<span class="bg-blue-100 text-blue-700 text-[8px] font-black px-3 py-1 rounded-full uppercase">SEM ${item.Semester}</span>` : ''}
-                        <span class="bg-slate-50 text-slate-400 text-[8px] font-black px-3 py-1 rounded-full uppercase border border-slate-100">${item.Kategori}</span>
-                    </div>
-                    <h3 class="font-black text-slate-800 text-lg mb-2 uppercase leading-tight group-hover:text-blue-600 transition-colors">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</h3>
-                    <p class="text-slate-500 text-xs mb-8 line-clamp-3">${item.Keterangan || '-'}</p>
-                    <a href="${item.Pautan || '#'}" target="_blank" class="block w-full text-center bg-slate-900 text-white text-[9px] font-black py-4 rounded-xl hover:bg-blue-600 transition-all shadow-lg uppercase">Lihat Fail</a>
-                </div>
-            `).join('');
+            const body = document.getElementById('table-body');
+            const empty = document.getElementById('empty-msg');
+            
+            if(data.length === 0) {
+                body.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            body.innerHTML = data.map(item => {
+                const dlLink = getDownloadLink(item.Pautan || '#');
+                const rowStyle = "px-6 py-4 border-b border-slate-50";
+                
+                let content = `<td class="${rowStyle}">${item.Tahun}</td>`;
+                if(currentTab === 'Folio_Kursus') content += `<td class="${rowStyle} font-bold text-blue-600 italic">${item.Semester || '-'}</td>`;
+                
+                content += `<td class="${rowStyle}"><span class="bg-slate-100 px-2 py-1 rounded text-[9px] uppercase font-black tracking-tighter text-slate-500 border border-slate-200">${item.Kategori}</span></td>`;
+                content += `<td class="${rowStyle} font-bold text-slate-800 uppercase tracking-tight">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</td>`;
+                
+                content += `
+                    <td class="${rowStyle} text-center space-x-3">
+                        <a href="${item.Pautan}" target="_blank" title="Lihat Fail" class="text-blue-500 hover:text-blue-700 transition-colors text-lg">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="${dlLink}" download title="Muat Turun" class="text-emerald-500 hover:text-emerald-700 transition-colors text-lg">
+                            <i class="fas fa-file-download"></i>
+                        </a>
+                    </td>
+                `;
+                return `<tr>${content}</tr>`;
+            }).join('');
         }
 
+        // FUNGSI MODAL (Sama seperti V5.1)
         function openModal() {
             document.getElementById('modal-add').classList.remove('hidden');
             document.getElementById('modal-title').innerText = currentTab === 'Data_Folio' ? 'Daftar Folio Pensyarah' : 'Daftar Folio Kursus';
             document.getElementById('label-nama').innerText = currentTab === 'Data_Folio' ? 'Nama Pensyarah' : 'Kod & Nama Kursus';
-            
-            // Toggle dropdown Semester dalam borang
             document.getElementById('f-sem-container').classList.toggle('hidden', currentTab === 'Data_Folio');
-            
             const catForm = document.getElementById('f-kategori');
             const target = currentTab === 'Data_Folio' ? catP : catK;
             catForm.innerHTML = target.map(c => `<option value="${c}">${c}</option>`).join('');
         }
-
         function closeModal() { document.getElementById('modal-add').classList.add('hidden'); document.getElementById('add-form').reset(); }
-
         document.getElementById('add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-save');
-            btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
+            const btn = document.getElementById('btn-save'); btn.innerHTML = '...'; btn.disabled = true;
             const payload = {
                 targetSheet: currentTab,
                 tahun: document.getElementById('f-tahun').value,
@@ -263,23 +313,19 @@
             try {
                 const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await res.json();
-                if(result.result === "success") { alert("Berjaya disimpan!"); closeModal(); loadData(); }
-            } catch (err) { alert("Ralat menyimpan data."); }
+                if(result.result === "success") { alert("Berjaya!"); closeModal(); loadData(); }
+            } catch (err) { alert("Ralat!"); }
             btn.innerHTML = 'Simpan Rekod'; btn.disabled = false;
         });
-
         function showChecklist() {
             const y = document.getElementById('year-filter').value;
             const s = document.getElementById('sem-filter').value;
-            if(y === "Semua") { alert("Pilih TAHUN untuk semakan."); return; }
-            if(currentTab === 'Folio_Kursus' && s === "Semua") { alert("Pilih SEMESTER untuk semakan kursus."); return; }
-            
+            if(y === "Semua") { alert("Pilih TAHUN!"); return; }
             document.getElementById('checklist-info').innerText = `Tahun: ${y} ${currentTab === 'Folio_Kursus' ? '| Sem: ' + s : ''}`;
             const req = currentTab === 'Data_Folio' ? catP : catK;
             let filterData = fullData.filter(d => d.Tahun == y);
-            if(currentTab === 'Folio_Kursus') filterData = filterData.filter(d => d.Semester == s);
+            if(currentTab === 'Folio_Kursus' && s !== "Semua") filterData = filterData.filter(d => d.Semester == s);
             const existing = [...new Set(filterData.map(d => d.Kategori))];
-            
             document.getElementById('checklist-content').innerHTML = req.map(cat => {
                 const ok = existing.includes(cat);
                 return `<div class="flex items-center justify-between p-4 rounded-2xl border ${ok ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-red-100 bg-red-50 text-red-700'}">
