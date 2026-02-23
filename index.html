@@ -3,74 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Folio IPG Premium v8.0 (Edit Function)</title>
+    <title>Sistem E-Folio IPG v8.0 (Edit & Search)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .bg-premium { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
-        .btn-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
     </style>
 </head>
-<body class="min-h-screen text-slate-900">
+<body class="min-h-screen">
 
     <div id="login-page" class="flex items-center justify-center min-h-screen px-4 bg-premium">
         <div class="max-w-md w-full glass-card rounded-[3rem] shadow-2xl p-12 text-center">
-            <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo IPG" class="w-24 h-24 mx-auto mb-6">
-            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight mb-2 uppercase">E-Folio</h1>
-            <form id="login-form" class="space-y-5">
-                <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none font-semibold">
-                <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none font-semibold">
-                <button type="submit" id="btn-login" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-xl hover:bg-blue-700 transition-all active:scale-95 btn-hover uppercase text-xs">Log Masuk</button>
+            <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-24 h-24 mx-auto mb-6">
+            <h1 class="text-3xl font-extrabold text-slate-800 mb-8 uppercase">E-Folio Login</h1>
+            <form id="login-form" class="space-y-4">
+                <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold">
+                <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 font-bold">
+                <button type="submit" id="btn-login" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-xl hover:bg-blue-700 transition-all uppercase text-xs">Log Masuk</button>
             </form>
-            <p id="login-error" class="text-red-500 text-xs mt-6 hidden font-bold">Akses Ditolak!</p>
+            <p id="login-error" class="text-red-500 text-xs mt-4 hidden font-bold">Maklumat tidak sah!</p>
         </div>
     </div>
 
     <div id="dashboard-page" class="hidden">
-        <nav class="bg-premium text-white shadow-2xl sticky top-0 z-50 px-8 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-10 h-10 object-contain brightness-110">
-                <span class="text-xl font-black uppercase tracking-tighter">IPG<span class="text-blue-400">PORTAL</span></span>
-            </div>
+        <nav class="bg-premium text-white shadow-xl sticky top-0 z-50 px-8 py-5 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <button onclick="showChecklist()" class="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all">Semak</button>
-                <button onclick="openModal('add')" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-[10px] font-black shadow-lg uppercase tracking-widest btn-hover transition-all">Tambah</button>
-                <button onclick="logout()" class="ml-4 text-slate-400 hover:text-red-400 p-2 transition-colors"><i class="fas fa-power-off text-lg"></i></button>
+                <img src="https://i.imgur.com/b1LxHF1.png" alt="Logo" class="w-10 h-10 object-contain brightness-110">
+                <span class="text-xl font-black uppercase tracking-tighter italic">IPG<span class="text-blue-400">PORTAL</span></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="showChecklist()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"><i class="fas fa-clipboard-check mr-1"></i> Semak</button>
+                <button onclick="openModal('add')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"><i class="fas fa-plus mr-1"></i> Tambah</button>
+                <button onclick="logout()" class="ml-4 text-slate-400 hover:text-red-400"><i class="fas fa-power-off text-lg"></i></button>
             </div>
         </nav>
 
         <div class="bg-slate-900 border-b border-slate-800 flex justify-center sticky top-[80px] z-40">
-            <button onclick="switchTab('Data_Folio')" id="tab-pensyarah" class="py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] transition-all">Folio Pensyarah</button>
-            <button onclick="switchTab('Folio_Kursus')" id="tab-kursus" class="py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] transition-all">Folio Kursus</button>
+            <button onclick="switchTab('Data_Folio')" id="tab-p" class="py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-white border-b-2 border-blue-500 transition-all">Folio Pensyarah</button>
+            <button onclick="switchTab('Folio_Kursus')" id="tab-k" class="py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent transition-all">Folio Kursus</button>
         </div>
 
         <main class="max-w-7xl mx-auto p-6 md:p-10">
-            <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 glass-card p-8 rounded-[2.5rem] shadow-xl mt-[-20px]">
-                <div class="flex flex-wrap gap-6">
-                    <select id="year-filter" onchange="applyFilters()" class="w-36 bg-slate-100/50 rounded-2xl px-5 py-3.5 font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
-                    <select id="sem-filter" onchange="applyFilters()" class="w-28 bg-slate-100/50 rounded-2xl px-5 py-3.5 font-bold text-xs outline-none hidden"><option value="Semua">Semua</option><option value="I">I</option><option value="II">II</option><option value="III">III</option></select>
-                    <select id="category-filter" onchange="applyFilters()" class="w-72 bg-slate-100/50 rounded-2xl px-5 py-3.5 font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
+            <div class="mb-8 flex flex-wrap gap-4 items-end glass-card p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Tahun</label>
+                    <select id="year-filter" onchange="applyFilters()" class="block w-32 bg-slate-50 rounded-xl px-4 py-3 font-bold text-xs outline-none"></select>
                 </div>
-                <div class="bg-blue-600 px-10 py-5 rounded-3xl shadow-xl text-white text-center">
-                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80">Fail Ditemui</p>
-                    <h2 id="stats-count" class="text-4xl font-black mt-1">0</h2>
+                <div id="sem-filter-container" class="space-y-1 hidden">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Semester</label>
+                    <select id="sem-filter" onchange="applyFilters()" class="block w-28 bg-slate-50 rounded-xl px-4 py-3 font-bold text-xs outline-none">
+                        <option value="Semua">Semua</option><option value="I">I</option><option value="II">II</option><option value="III">III</option>
+                    </select>
+                </div>
+                <div class="space-y-1 flex-1">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Cari Nama/Subjek</label>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-3.5 text-slate-300"></i>
+                        <input type="text" id="text-search" onkeyup="applyFilters()" placeholder="Taip di sini untuk mencari..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="bg-blue-600 px-8 py-4 rounded-2xl text-white text-center shadow-lg shadow-blue-100">
+                    <p class="text-[9px] font-black uppercase opacity-70">JUMLAH FAIL</p>
+                    <h2 id="stats-count" class="text-3xl font-black leading-none">0</h2>
                 </div>
             </div>
 
-            <div class="glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200/50">
+            <div class="glass-card rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead class="bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest">
                             <tr id="table-header"></tr>
                         </thead>
-                        <tbody id="table-body" class="text-slate-600 text-[13px] font-medium"></tbody>
+                        <tbody id="table-body" class="text-slate-600 text-xs font-semibold"></tbody>
                     </table>
                 </div>
-                <div id="empty-msg" class="hidden text-center py-24 text-slate-400 italic">Tiada rekod ditemui.</div>
+                <div id="empty-msg" class="hidden text-center py-24 text-slate-300 italic">Tiada data dijumpai.</div>
             </div>
         </main>
     </div>
@@ -80,19 +90,19 @@
             <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeModal()"></div>
             <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-2xl p-10 relative">
                 <h2 id="modal-title" class="text-2xl font-extrabold text-slate-800 uppercase mb-8">Daftar Rekod</h2>
-                <form id="add-form" class="space-y-6">
+                <form id="add-form" class="space-y-4">
                     <input type="hidden" id="edit-row-index">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <input type="number" id="f-tahun" placeholder="Tahun" required class="px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none">
-                        <select id="f-semester" class="px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none hidden"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select>
-                        <select id="f-kategori" required class="px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none"></select>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <input type="number" id="f-tahun" placeholder="Tahun" required class="px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none">
+                        <select id="f-semester" class="px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none hidden"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select>
+                        <select id="f-kategori" required class="px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none"></select>
                     </div>
-                    <input type="text" id="f-nama" placeholder="Nama / Subjek" required class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none">
-                    <input type="url" id="f-pautan" placeholder="URL Fail (Drive)" required class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none">
-                    <textarea id="f-keterangan" rows="2" placeholder="Nota..." class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl font-bold text-sm outline-none"></textarea>
+                    <input type="text" id="f-nama" placeholder="Nama / Subjek" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none">
+                    <input type="url" id="f-pautan" placeholder="Pautan Drive (URL)" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none">
+                    <textarea id="f-keterangan" rows="2" placeholder="Nota tambahan..." class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold text-sm outline-none"></textarea>
                     <div class="flex gap-4 pt-4">
-                        <button type="button" onclick="closeModal()" class="flex-1 bg-slate-100 text-slate-400 font-bold py-5 rounded-2xl uppercase text-[11px]">Batal</button>
-                        <button type="submit" id="btn-save" class="flex-1 bg-slate-900 text-white font-bold py-5 rounded-2xl uppercase text-[11px] btn-hover">Simpan</button>
+                        <button type="button" onclick="closeModal()" class="flex-1 bg-slate-100 text-slate-400 font-bold py-4 rounded-2xl uppercase text-[10px]">Batal</button>
+                        <button type="submit" id="btn-save" class="flex-1 bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-xl uppercase text-[10px]">Simpan Rekod</button>
                     </div>
                 </form>
             </div>
@@ -101,11 +111,11 @@
 
     <div id="modal-checklist" class="fixed inset-0 z-[100] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeChecklist()"></div>
+            <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeChecklist()"></div>
             <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-lg p-10 relative">
-                <h2 class="text-2xl font-extrabold text-slate-800 uppercase mb-8">Audit Dokumen</h2>
-                <div id="checklist-content" class="space-y-3"></div>
-                <button onclick="closeChecklist()" class="w-full mt-10 bg-slate-900 text-white font-bold py-5 rounded-2xl uppercase text-[11px]">Tutup</button>
+                <h2 class="text-xl font-black text-slate-800 uppercase mb-2">Audit Dokumen</h2>
+                <div id="checklist-content" class="space-y-2 mt-6"></div>
+                <button onclick="closeChecklist()" class="w-full mt-10 bg-slate-900 text-white font-bold py-4 rounded-2xl uppercase text-[10px]">Tutup</button>
             </div>
         </div>
     </div>
@@ -114,7 +124,6 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbw72-zryqkMFIBlO3akMk1mBebj3QAEXeanJpa8NTUltiFmJ5GPkusislEf9RJ9JrQTAw/exec";
         let currentTab = 'Data_Folio';
         let fullData = [];
-
         const catP = ["PROFIL PENSYARAH", "SENARAI TUGAS", "SIJIL KELAYAKAN", "SURAT LANTIKAN PERKHIDMATAN", "SURAT PANGGILAN", "SIJIL KURSUS ATAU BENGKEL", "LAIN LAIN"];
         const catK = ["KALENDER AKADEMIK", "JADUAL WAKTU", "MAKLUMAT KURSUS", "RANCANGAN SEMESTER", "RANCANGAN MINGGUAN", "MAKLUMAT PELAJAR", "REKOD KEHADIRAN PELAJAR", "JST", "SOALAN TUGASAN", "RUBRIK", "PENTAKSIRAN", "MODERASI PENTAKSIRAN", "LAPORAN PENTAKSIRAN", "TUGAS TAMBAHAN", "PERINCIAN ATP", "LAIN LAIN"];
 
@@ -129,7 +138,7 @@
                 const user = data.find(u => u.Username == document.getElementById('username').value && u.Password == document.getElementById('password').value);
                 if(user) { localStorage.setItem('f_auth', '1'); showDashboard(); }
                 else { document.getElementById('login-error').classList.remove('hidden'); btn.innerHTML = 'Log Masuk'; btn.disabled = false; }
-            } catch (err) { alert("API Error!"); btn.disabled = false; }
+            } catch (err) { alert("Ralat!"); btn.disabled = false; }
         });
 
         function showDashboard() {
@@ -140,10 +149,9 @@
 
         function switchTab(name) {
             currentTab = name;
-            document.getElementById('tab-pensyarah').className = name === 'Data_Folio' ? 'py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] text-white border-b-2 border-blue-500' : 'py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 border-b-2 border-transparent';
-            document.getElementById('tab-kursus').className = name === 'Folio_Kursus' ? 'py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] text-white border-b-2 border-blue-500' : 'py-5 px-12 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 border-b-2 border-transparent';
-            document.getElementById('sem-filter').classList.toggle('hidden', name === 'Data_Folio');
-            document.getElementById('category-filter').innerHTML = '<option value="Semua">Semua Kategori</option>' + (name === 'Data_Folio' ? catP : catK).map(c => `<option value="${c}">${c}</option>`).join('');
+            document.getElementById('tab-p').className = name === 'Data_Folio' ? 'py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-white border-b-2 border-blue-500 transition-all' : 'py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent transition-all';
+            document.getElementById('tab-k').className = name === 'Folio_Kursus' ? 'py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-white border-b-2 border-blue-500 transition-all' : 'py-5 px-12 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent transition-all';
+            document.getElementById('sem-filter-container').classList.toggle('hidden', name === 'Data_Folio');
             renderHeader();
             loadData();
         }
@@ -151,7 +159,7 @@
         function renderHeader() {
             const h = document.getElementById('table-header');
             const s = "px-8 py-5 opacity-80";
-            h.innerHTML = currentTab === 'Data_Folio' ? `<th class="${s}">Tahun</th><th class="${s}">Kategori</th><th class="${s}">Tajuk</th><th class="${s} text-center">Aksi</th>` : `<th class="${s}">Tahun</th><th class="${s}">Sem</th><th class="${s}">Kategori</th><th class="${s}">Tajuk</th><th class="${s} text-center">Aksi</th>`;
+            h.innerHTML = currentTab === 'Data_Folio' ? `<th class="${s}">Tahun</th><th class="${s}">Kategori</th><th class="${s}">Nama/Tajuk</th><th class="${s} text-center">Aksi</th>` : `<th class="${s}">Tahun</th><th class="${s}">Sem</th><th class="${s}">Kategori</th><th class="${s}">Tajuk</th><th class="${s} text-center">Aksi</th>`;
         }
 
         async function loadData() {
@@ -168,11 +176,11 @@
         function applyFilters() {
             const y = document.getElementById('year-filter').value;
             const s = document.getElementById('sem-filter').value;
-            const c = document.getElementById('category-filter').value;
+            const search = document.getElementById('text-search').value.toLowerCase();
             let f = fullData;
             if(y !== "Semua") f = f.filter(d => d.Tahun == y);
             if(currentTab === 'Folio_Kursus' && s !== "Semua") f = f.filter(d => d.Semester == s);
-            if(c !== "Semua") f = f.filter(d => d.Kategori == c);
+            if(search) f = f.filter(d => (currentTab === 'Folio_Kursus' ? d.Nama_Kursus : d.Nama).toLowerCase().includes(search));
             renderTable(f);
         }
 
@@ -186,9 +194,8 @@
                 const row = "px-8 py-6 border-b border-slate-50 transition-all hover:bg-slate-50/80";
                 const driveId = item.Pautan.includes('/d/') ? item.Pautan.split('/d/')[1].split('/')[0] : '';
                 const dl = driveId ? `https://drive.google.com/uc?export=download&id=${driveId}` : item.Pautan;
-                
                 let c = `<td class="${row} font-black text-slate-400">${item.Tahun}</td>`;
-                if(currentTab === 'Folio_Kursus') c += `<td class="${row} font-black text-blue-600">SEM ${item.Semester || '-'}</td>`;
+                if(currentTab === 'Folio_Kursus') c += `<td class="${row} font-bold text-blue-600 italic">SEM ${item.Semester || '-'}</td>`;
                 c += `<td class="${row}"><span class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg text-[9px] font-black border border-indigo-100 uppercase">${item.Kategori}</span></td>`;
                 c += `<td class="${row} font-extrabold text-slate-700 uppercase">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</td>`;
                 c += `<td class="${row} text-center"><div class="flex justify-center gap-4">
@@ -203,11 +210,9 @@
         function openModal(mode, item = null) {
             document.getElementById('modal-add').classList.remove('hidden');
             document.getElementById('f-sem-container').classList.toggle('hidden', currentTab === 'Data_Folio');
-            const list = currentTab === 'Data_Folio' ? catP : catK;
-            document.getElementById('f-kategori').innerHTML = list.map(c => `<option value="${c}">${c}</option>`).join('');
-            
+            document.getElementById('f-kategori').innerHTML = (currentTab === 'Data_Folio' ? catP : catK).map(c => `<option value="${c}">${c}</option>`).join('');
             if(mode === 'edit' && item) {
-                document.getElementById('modal-title').innerText = 'Edit Rekod';
+                document.getElementById('modal-title').innerText = 'Sunting Rekod';
                 document.getElementById('edit-row-index').value = item.rowIndex;
                 document.getElementById('f-tahun').value = item.Tahun;
                 if(currentTab === 'Folio_Kursus') document.getElementById('f-semester').value = item.Semester;
@@ -216,7 +221,7 @@
                 document.getElementById('f-pautan').value = item.Pautan;
                 document.getElementById('f-keterangan').value = item.Keterangan || "";
             } else {
-                document.getElementById('modal-title').innerText = 'Daftar Baru';
+                document.getElementById('modal-title').innerText = 'Daftar Bahan Baru';
                 document.getElementById('edit-row-index').value = "";
                 document.getElementById('add-form').reset();
             }
@@ -226,7 +231,7 @@
 
         document.getElementById('add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-save'); btn.innerHTML = 'SAVING...'; btn.disabled = true;
+            const btn = document.getElementById('btn-save'); btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
             const rowIndex = document.getElementById('edit-row-index').value;
             const payload = {
                 targetSheet: currentTab,
@@ -257,7 +262,7 @@
                 const ok = existing.includes(cat);
                 return `<div class="flex items-center justify-between p-5 rounded-3xl border ${ok ? 'border-emerald-100 bg-emerald-50 text-emerald-700' : 'border-red-100 bg-red-50 text-red-700 shadow-sm'}">
                     <span class="text-[10px] font-black uppercase tracking-widest">${cat}</span>
-                    <i class="fas ${ok ? 'fa-check-circle text-emerald-500' : 'fa-minus-circle text-red-300'} text-xl"></i>
+                    <i class="fas ${ok ? 'fa-check-circle text-emerald-500' : 'fa-times-circle text-red-300'} text-xl"></i>
                 </div>`;
             }).join('');
             document.getElementById('modal-checklist').classList.remove('hidden');
