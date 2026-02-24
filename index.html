@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Folio IPG Premium v11.0</title>
+    <title>E-Folio IPG Premium v12.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -51,10 +51,10 @@
 
         <main class="max-w-7xl mx-auto p-6 md:p-10">
             
-            <div class="glass-card rounded-[2.5rem] p-8 shadow-xl border border-slate-100 mb-8 flex flex-col md:flex-row items-center gap-8 animate-fade-in">
+            <div class="glass-card rounded-[2.5rem] p-8 shadow-xl border border-slate-100 mb-8 flex flex-col md:flex-row items-center gap-8">
                 <div class="relative">
                     <div class="w-32 h-40 bg-slate-200 rounded-2xl overflow-hidden border-4 border-blue-500/20 shadow-lg">
-                        <img src="https://i.imgur.com/9uSlDpC.png" alt="Passport" class="w-full h-full object-cover">
+                        <img src="https://i.imgur.com/9uSlDpC.png" alt="Haniff Faizal" class="w-full h-full object-cover">
                     </div>
                     <div class="absolute -bottom-2 -right-2 bg-blue-600 text-white p-2 rounded-full border-4 border-white shadow-lg"><i class="fas fa-user-check text-[10px]"></i></div>
                 </div>
@@ -68,27 +68,24 @@
                 </div>
             </div>
 
-            <div class="mb-10 flex flex-wrap gap-4 items-end glass-card p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+            <div class="mb-10 flex flex-wrap gap-6 items-end glass-card p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
                 <div class="space-y-1">
-                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Tahun</label>
-                    <select id="year-filter" onchange="applyFilters()" class="block w-32 bg-slate-50 border rounded-xl px-4 py-3 font-bold text-xs outline-none"></select>
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1 tracking-widest">Sesi Tahun</label>
+                    <select id="year-filter" onchange="applyFilters()" class="block w-40 bg-slate-50 border-none rounded-xl px-5 py-3 font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
                 </div>
                 <div id="sem-filter-container" class="space-y-1 hidden">
-                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Semester</label>
-                    <select id="sem-filter" onchange="applyFilters()" class="block w-28 bg-slate-50 border rounded-xl px-4 py-3 font-bold text-xs outline-none">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1 tracking-widest">Semester</label>
+                    <select id="sem-filter" onchange="applyFilters()" class="block w-32 bg-slate-50 border-none rounded-xl px-5 py-3 font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="Semua">Semua</option><option value="I">I</option><option value="II">II</option><option value="III">III</option>
                     </select>
                 </div>
-                <div class="space-y-1 flex-1 min-w-[200px]">
-                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1">Carian Rekod</label>
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-4 top-3.5 text-slate-300"></i>
-                        <input type="text" id="text-search" onkeyup="applyFilters()" placeholder="Cari tajuk rekod..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border rounded-xl font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+                <div id="cat-filter-container" class="space-y-1">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-1 tracking-widest">Kategori Dokumen</label>
+                    <select id="category-filter" onchange="applyFilters()" class="block w-72 bg-slate-50 border-none rounded-xl px-5 py-3 font-bold text-xs outline-none focus:ring-2 focus:ring-blue-500"></select>
                 </div>
-                <div class="bg-blue-600 px-10 py-4 rounded-2xl text-white text-center shadow-lg shadow-blue-200">
+                <div class="ml-auto bg-blue-600 px-10 py-5 rounded-3xl shadow-xl text-white text-center">
                     <p class="text-[9px] font-black uppercase tracking-widest opacity-70">Total Fail</p>
-                    <h2 id="stats-count" class="text-3xl font-black mt-1">0</h2>
+                    <h2 id="stats-count" class="text-4xl font-black leading-none mt-1">0</h2>
                 </div>
             </div>
 
@@ -101,7 +98,7 @@
                         <tbody id="table-body" class="text-slate-600 text-xs font-semibold"></tbody>
                     </table>
                 </div>
-                <div id="empty-msg" class="hidden text-center py-24 text-slate-300 italic font-bold">Tiada data dijumpai.</div>
+                <div id="empty-msg" class="hidden text-center py-24 text-slate-300 italic font-bold">Tiada data direkodkan.</div>
             </div>
         </main>
     </div>
@@ -109,8 +106,8 @@
     <div id="modal-add" class="fixed inset-0 z-[100] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
             <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeModal()"></div>
-            <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-2xl p-10 relative">
-                <h2 id="modal-title" class="text-2xl font-extrabold text-slate-800 uppercase mb-8">Daftar Rekod</h2>
+            <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-2xl p-10 relative border border-slate-100">
+                <h2 id="modal-title" class="text-2xl font-extrabold text-slate-800 uppercase mb-8 tracking-tight">Daftar Rekod</h2>
                 <form id="add-form" class="space-y-4">
                     <input type="hidden" id="edit-row-index">
                     <div id="dynamic-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -126,8 +123,8 @@
     <div id="modal-checklist" class="fixed inset-0 z-[100] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
             <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeChecklist()"></div>
-            <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-lg p-10 relative">
-                <h2 class="text-xl font-black text-slate-800 uppercase mb-2">Audit Dokumen</h2>
+            <div class="bg-white rounded-[3rem] shadow-2xl z-[110] w-full max-w-lg p-10 relative border border-slate-100">
+                <h2 class="text-xl font-black text-slate-800 uppercase mb-2 tracking-tight">Audit Dokumen</h2>
                 <p id="checklist-info" class="text-blue-600 font-bold text-[10px] uppercase mb-8"></p>
                 <div id="checklist-content" class="space-y-3"></div>
                 <button onclick="closeChecklist()" class="w-full mt-10 bg-slate-900 text-white font-bold py-4 rounded-2xl uppercase text-[10px]">Tutup</button>
@@ -147,14 +144,14 @@
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-login'); btn.innerHTML = '...'; btn.disabled = true;
+            const btn = document.getElementById('btn-login'); btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>'; btn.disabled = true;
             try {
                 const res = await fetch(`${API_URL}?sheet=Users`);
                 const data = await res.json();
                 const user = data.find(u => u.Username == document.getElementById('username').value && u.Password == document.getElementById('password').value);
                 if(user) { localStorage.setItem('f_auth', '1'); showDashboard(); }
                 else { document.getElementById('login-error').classList.remove('hidden'); btn.innerHTML = 'Log Masuk'; btn.disabled = false; }
-            } catch (err) { alert("Ralat!"); btn.disabled = false; }
+            } catch (err) { alert("API Error!"); btn.disabled = false; }
         });
 
         function showDashboard() {
@@ -172,10 +169,14 @@
             document.getElementById('tab-k').className = name === 'Folio_Kursus' ? styleActive : styleInactive;
             document.getElementById('tab-s').className = name === 'Subjek_Diajar' ? styleActive : styleInactive;
             
-            // Filter visibility
             document.getElementById('sem-filter-container').classList.toggle('hidden', name === 'Data_Folio');
+            document.getElementById('cat-filter-container').classList.toggle('hidden', name === 'Subjek_Diajar');
             document.getElementById('btn-audit').classList.toggle('hidden', name === 'Subjek_Diajar');
 
+            const filter = document.getElementById('category-filter');
+            const list = name === 'Data_Folio' ? catP : catK;
+            filter.innerHTML = '<option value="Semua">Semua Kategori</option>' + list.map(c => `<option value="${c}">${c}</option>`).join('');
+            
             renderHeader();
             loadData();
         }
@@ -186,31 +187,31 @@
             if (currentTab === 'Subjek_Diajar') {
                 h.innerHTML = `<th class="${s}">Tahun</th><th class="${s}">Sem</th><th class="${s}">Kod</th><th class="${s}">Subjek</th><th class="${s}">Kelas</th><th class="${s} text-center">Tindakan</th>`;
             } else if (currentTab === 'Data_Folio') {
-                h.innerHTML = `<th class="${s}">Tahun</th><th class="${s}">Kategori</th><th class="${s}">Nama/Tajuk</th><th class="${s} text-center">Tindakan</th>`;
+                h.innerHTML = `<th class="${s}">Tahun</th><th class="${s}">Kategori Dokumen</th><th class="${s}">Tajuk Rekod</th><th class="${s} text-center">Tindakan</th>`;
             } else {
-                h.innerHTML = `<th class="${s}">Tahun</th><th class="${s}">Sem</th><th class="${s}">Kategori</th><th class="${s}">Tajuk</th><th class="${s} text-center">Tindakan</th>`;
+                h.innerHTML = `<th class="${s}">Tahun</th><th class="${s}">Sem</th><th class="${s}">Kategori Dokumen</th><th class="${s}">Tajuk Rekod</th><th class="${s} text-center">Tindakan</th>`;
             }
         }
 
         async function loadData() {
-            document.getElementById('table-body').innerHTML = '<tr><td colspan="6" class="text-center py-20 font-bold text-slate-300 uppercase tracking-widest text-[9px]">Sinkronisasi...</td></tr>';
+            document.getElementById('table-body').innerHTML = '<tr><td colspan="6" class="text-center py-20 font-bold text-slate-300 uppercase tracking-widest text-[9px]"><i class="fas fa-sync fa-spin mr-2"></i> Sinkronisasi...</td></tr>';
             try {
                 const res = await fetch(`${API_URL}?sheet=${currentTab}`);
                 fullData = await res.json();
                 const years = [...new Set(fullData.map(d => d.Tahun))].filter(Boolean).sort().reverse();
-                document.getElementById('year-filter').innerHTML = '<option value="Semua">Tahun</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+                document.getElementById('year-filter').innerHTML = '<option value="Semua">Semua Tahun</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
                 applyFilters();
-            } catch (err) { alert("Data Gagal!"); }
+            } catch (err) { alert("Sinkronisasi Gagal!"); }
         }
 
         function applyFilters() {
             const y = document.getElementById('year-filter').value;
             const s = document.getElementById('sem-filter').value;
-            const search = document.getElementById('text-search').value.toLowerCase();
+            const c = document.getElementById('category-filter').value;
             let f = fullData;
             if(y !== "Semua") f = f.filter(d => d.Tahun == y);
             if(currentTab !== 'Data_Folio' && s !== "Semua") f = f.filter(d => d.Semester == s);
-            if(search) f = f.filter(d => (d.Nama || d.Nama_Kursus || d.Nama_Subjek || d.Kod_Subjek || "").toLowerCase().includes(search));
+            if(currentTab !== 'Subjek_Diajar' && c !== "Semua") f = f.filter(d => d.Kategori == c);
             renderTable(f);
         }
 
@@ -229,33 +230,33 @@
                 let c = `<td class="${row} font-black text-slate-300">${item.Tahun}</td>`;
                 
                 if (currentTab === 'Subjek_Diajar') {
-                    c += `<td class="${row} font-bold text-blue-500">SEM ${item.Semester}</td>`;
+                    c += `<td class="${row} font-bold text-blue-500 italic">SEM ${item.Semester}</td>`;
                     c += `<td class="${row} font-black text-indigo-600">${item.Kod_Subjek}</td>`;
                     c += `<td class="${row} font-extrabold text-slate-700 uppercase">${item.Nama_Subjek}</td>`;
-                    c += `<td class="${row} font-bold text-slate-500">${item.Kelas}</td>`;
+                    c += `<td class="${row} font-bold text-slate-500 uppercase">${item.Kelas}</td>`;
                 } else {
                     if(currentTab === 'Folio_Kursus') c += `<td class="${row} font-bold text-blue-500 italic">SEM ${item.Semester || '-'}</td>`;
-                    c += `<td class="${row}"><span class="bg-indigo-50 text-indigo-500 px-2 py-1 rounded text-[8px] font-black border border-indigo-100 uppercase">${item.Kategori}</span></td>`;
-                    c += `<td class="${row} font-extrabold text-slate-800 uppercase">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</td>`;
+                    c += `<td class="${row}"><span class="bg-indigo-50 text-indigo-500 px-3 py-1.5 rounded-lg text-[8px] font-black border border-indigo-100 uppercase">${item.Kategori}</span></td>`;
+                    c += `<td class="${row} font-extrabold text-slate-700 uppercase">${currentTab === 'Folio_Kursus' ? item.Nama_Kursus : item.Nama}</td>`;
                 }
 
-                c += `<td class="${row} text-center"><div class="flex justify-center gap-3">
-                    <button onclick='openModal("edit", ${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-slate-300 hover:text-blue-500" title="Sunting"><i class="fas fa-pencil-alt"></i></button>
-                    <button onclick='deleteRecord(${item.rowIndex})' class="text-slate-200 hover:text-red-500" title="Padam"><i class="fas fa-trash-alt"></i></button>
-                    ${item.Pautan ? `<a href="${item.Pautan}" target="_blank" class="text-slate-300 hover:text-blue-500"><i class="fas fa-eye"></i></a>` : ''}
-                    ${driveId ? `<a href="${dl}" download class="text-slate-300 hover:text-emerald-500"><i class="fas fa-download"></i></a>` : ''}
+                c += `<td class="${row} text-center"><div class="flex justify-center gap-4">
+                    <button onclick='openModal("edit", ${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-slate-300 hover:text-blue-500 transition-colors" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                    <button onclick='deleteRecord(${item.rowIndex})' class="text-slate-200 hover:text-red-500 transition-colors" title="Padam"><i class="fas fa-trash-alt"></i></button>
+                    ${item.Pautan ? `<a href="${item.Pautan}" target="_blank" class="text-slate-300 hover:text-emerald-500 transition-colors" title="Papar Fail"><i class="fas fa-eye"></i></a>` : ''}
+                    ${driveId ? `<a href="${dl}" download class="bg-slate-900 text-white w-9 h-9 rounded-xl flex items-center justify-center hover:bg-emerald-500 shadow-lg transition-all" title="Download"><i class="fas fa-download text-xs"></i></a>` : ''}
                 </div></td>`;
                 return `<tr>${c}</tr>`;
             }).join('');
         }
 
         async function deleteRecord(idx) {
-            if(!confirm("⚠️ Padam rekod ini?")) return;
+            if(!confirm("⚠️ Padam rekod ini secara kekal?")) return;
             try {
                 const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', rowIndex: idx, targetSheet: currentTab }) });
                 const result = await res.json();
                 if(result.result === "success") loadData();
-            } catch (err) { alert("Gagal!"); }
+            } catch (err) { alert("Gagal Padam!"); }
         }
 
         function openModal(mode, item = null) {
@@ -264,27 +265,23 @@
             document.getElementById('modal-title').innerText = mode === 'edit' ? 'Kemaskini Rekod' : 'Daftar Rekod Baru';
             document.getElementById('edit-row-index').value = mode === 'edit' ? item.rowIndex : '';
             
-            // Bina Borang Dinamik
-            let html = `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tahun</label><input type="number" id="f-tahun" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Tahun : new Date().getFullYear()}"></div>`;
+            let html = `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tahun</label><input type="number" id="f-tahun" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Tahun : new Date().getFullYear()}"></div>`;
             
             if (currentTab === 'Subjek_Diajar') {
-                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Semester</label><select id="f-semester" class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select></div>`;
-                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kod Subjek</label><input type="text" id="f-kod" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Kod_Subjek : ''}"></div>`;
-                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nama Subjek</label><input type="text" id="f-subjek" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Nama_Subjek : ''}"></div>`;
-                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kelas</label><input type="text" id="f-kelas" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Kelas : ''}"></div>`;
-                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Pautan (Opsyenal)</label><input type="url" id="f-pautan" class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Pautan : ''}"></div>`;
+                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Semester</label><select id="f-semester" class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select></div>`;
+                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kod Subjek</label><input type="text" id="f-kod" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Kod_Subjek : ''}"></div>`;
+                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nama Subjek</label><input type="text" id="f-subjek" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Nama_Subjek : ''}"></div>`;
+                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kelas</label><input type="text" id="f-kelas" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Kelas : ''}"></div>`;
+                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Pautan Fail (Opsyenal)</label><input type="url" id="f-pautan" class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Pautan : ''}"></div>`;
             } else {
-                if (currentTab === 'Folio_Kursus') html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Semester</label><select id="f-semester" class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select></div>`;
-                
+                if (currentTab === 'Folio_Kursus') html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Semester</label><select id="f-semester" class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none"><option value="I">I</option><option value="II">II</option><option value="III">III</option></select></div>`;
                 const list = currentTab === 'Data_Folio' ? catP : catK;
-                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kategori</label><select id="f-kategori" class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none">${list.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div>`;
-                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">${currentTab === 'Folio_Kursus' ? 'Kod & Tajuk Kursus' : 'Nama Pensyarah'}</label><input type="text" id="f-nama" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? (item.Nama || item.Nama_Kursus) : ''}"></div>`;
-                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">URL Fail Drive</label><input type="url" id="f-pautan" required class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Pautan : ''}"></div>`;
-                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Keterangan</label><textarea id="f-keterangan" class="w-full px-5 py-3 bg-slate-50 rounded-xl font-bold outline-none">${item ? item.Keterangan : ''}</textarea></div>`;
+                html += `<div><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Kategori</label><select id="f-kategori" class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none">${list.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div>`;
+                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Tajuk / Nama Rekod</label><input type="text" id="f-nama" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? (item.Nama || item.Nama_Kursus) : ''}"></div>`;
+                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Pautan Google Drive</label><input type="url" id="f-pautan" required class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none" value="${item ? item.Pautan : ''}"></div>`;
+                html += `<div class="md:col-span-2"><label class="text-[9px] font-black text-slate-400 uppercase ml-2">Nota Keterangan</label><textarea id="f-keterangan" class="w-full px-5 py-3.5 bg-slate-50 rounded-xl font-bold outline-none">${item ? item.Keterangan : ''}</textarea></div>`;
             }
             fields.innerHTML = html;
-            
-            // Set values for selects
             if(item && currentTab !== 'Data_Folio') document.getElementById('f-semester').value = item.Semester;
             if(item && currentTab !== 'Subjek_Diajar') document.getElementById('f-kategori').value = item.Kategori;
         }
@@ -293,13 +290,7 @@
             e.preventDefault();
             const btn = document.getElementById('btn-save'); btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
             const rowIndex = document.getElementById('edit-row-index').value;
-            
-            let payload = {
-                targetSheet: currentTab,
-                action: rowIndex ? "edit" : "add",
-                rowIndex: rowIndex,
-                tahun: document.getElementById('f-tahun').value
-            };
+            let payload = { targetSheet: currentTab, action: rowIndex ? "edit" : "add", rowIndex: rowIndex, tahun: document.getElementById('f-tahun').value };
 
             if (currentTab === 'Subjek_Diajar') {
                 payload.semester = document.getElementById('f-semester').value;
@@ -311,32 +302,34 @@
                 payload.kategori = document.getElementById('f-kategori').value;
                 payload.pautan = document.getElementById('f-pautan').value;
                 payload.keterangan = document.getElementById('f-keterangan').value;
-                if(currentTab === 'Folio_Kursus') {
-                    payload.semester = document.getElementById('f-semester').value;
-                    payload.nama_kursus = document.getElementById('f-nama').value;
-                } else {
-                    payload.nama = document.getElementById('f-nama').value;
-                }
+                if(currentTab === 'Folio_Kursus') { payload.semester = document.getElementById('f-semester').value; payload.nama_kursus = document.getElementById('f-nama').value; }
+                else { payload.nama = document.getElementById('f-nama').value; }
             }
 
             try {
                 const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const result = await res.json();
                 if(result.result === "success") { closeModal(); loadData(); }
-            } catch (err) { alert("Ralat!"); }
+            } catch (err) { alert("Ralat Simpan!"); }
             btn.innerHTML = 'Simpan Rekod'; btn.disabled = false;
         });
 
         function showChecklist() {
             const y = document.getElementById('year-filter').value;
+            const s = document.getElementById('sem-filter').value;
             if(y === "Semua") return alert("Pilih Tahun!");
+            if(currentTab === 'Folio_Kursus' && s === "Semua") return alert("Pilih Semester untuk semakan Kursus!");
+            
             const req = currentTab === 'Data_Folio' ? catP : catK;
-            const existing = [...new Set(fullData.filter(d => d.Tahun == y).map(d => d.Kategori))];
-            document.getElementById('checklist-info').innerText = `Tahun: ${y} | ${currentTab === 'Data_Folio' ? 'PENSYARAH' : 'KURSUS'}`;
+            let filtered = fullData.filter(d => d.Tahun == y);
+            if(currentTab === 'Folio_Kursus') filtered = filtered.filter(d => d.Semester == s);
+            const existing = [...new Set(filtered.map(d => d.Kategori))];
+            
+            document.getElementById('checklist-info').innerText = `Tahun: ${y} ${currentTab === 'Folio_Kursus' ? '| Sem: ' + s : ''}`;
             document.getElementById('checklist-content').innerHTML = req.map(cat => {
                 const ok = existing.includes(cat);
                 return `<div class="flex items-center justify-between p-4 rounded-2xl border ${ok ? 'border-emerald-100 bg-emerald-50 text-emerald-700 shadow-sm' : 'border-red-100 bg-red-50 text-red-700'}">
-                    <span class="text-[9px] font-black uppercase tracking-widest">${cat}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest">${cat}</span>
                     <i class="fas ${ok ? 'fa-check-circle text-emerald-500' : 'fa-times-circle text-red-300'} text-xl"></i>
                 </div>`;
             }).join('');
